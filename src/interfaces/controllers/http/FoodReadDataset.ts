@@ -28,26 +28,26 @@ export class FoodReadDataset {
     })
 
     const writer = fs.createWriteStream(
-      Path.resolve(__dirname, '', `${filename}`)
+      Path.resolve(process.cwd().concat("/data"), '', `${filename}`)
     )
 
     data.on('data', (chunk: any) => progressBar.tick(chunk.length))
     data.pipe(writer)
 
     setTimeout(() => {
+      console.log("-> Data extract... ")
       this.descompactar(filename)
     }, 3000)
   }
 
+
   descompactar(file: string) {
-    const gzipFileInput = path.join(__dirname, file)
-    const output = path.join(__dirname, `/json/product.json`)
+    const gzipFileInput = process.cwd().concat(`/data/${file}`)
+    const rootDir = process.cwd()
+    const output = `${rootDir}/data/product.json`;
 
     // Criando um stream de leitura p/ o arquivo comprimido
     const readStream = fs.createReadStream(gzipFileInput);
-
-    // Stream de escrita p/ o arquivo descompactado
-    const writeStream = fs.createWriteStream(output);
 
     // Utiliza a função 'pipe' para direcionar o conteúdo do arquivo comprimido
     // para o descompressor zlib e, em seguida, para o arquivo descompactado
@@ -68,7 +68,6 @@ export class FoodReadDataset {
         console.error('Erro ao fazer o parse do JSON:', parseError);
       }
     });
-
 
     // Evento para controlar o término da leitura
     rl.on('close', () => {

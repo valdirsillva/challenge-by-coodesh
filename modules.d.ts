@@ -3,6 +3,6 @@ declare namespace NodeJS {
     PORT: string;
     FOOD_DATA_TEXT: string;
     FOOD_DATASET: string;
-    CLUSTER_DBMONGO_ATLAS: string | undefined;
+    DATABASE_MONGODB: string | undefined;
   }
 }

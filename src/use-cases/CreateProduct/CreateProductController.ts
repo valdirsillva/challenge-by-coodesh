@@ -7,9 +7,8 @@ export class CreateProductControler {
 
     async handle(request: Request, response: Response): Promise<Response> {
         const data = request.body
-
         try {
-            await this.createProductUseCase.execute({ ...data })
+            await this.createProductUseCase.execute(data)
 
             return response.status(201).send()
 

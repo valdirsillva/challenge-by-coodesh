@@ -15,14 +15,12 @@ const productSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['draft', 'trash', 'published'],
-
-    required: true,
-    default: ''
+    default: 'published'
   },
 
   imported_t: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
 
@@ -48,22 +46,22 @@ const productSchema = new mongoose.Schema({
   },
   quantity: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   brands: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   categories: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   labels: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   cities: {
@@ -78,27 +76,27 @@ const productSchema = new mongoose.Schema({
   },
   stores: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   ingredients_text: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   traces: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   serving_size: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   serving_quantity: {
     type: Number,
-    required: true,
+    required: false,
     default: ''
   },
   nutriscore_score: {
@@ -115,12 +113,12 @@ const productSchema = new mongoose.Schema({
 
   main_category: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   image_url: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   }
 })

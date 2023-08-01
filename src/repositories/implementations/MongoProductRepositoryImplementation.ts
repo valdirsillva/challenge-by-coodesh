@@ -6,7 +6,9 @@ export class MongoProductRepositoryImplementation implements InterfaceProductRep
 
     async save(data: Product) {
         try {
-            const products = await Mongo.insertMany(data)
+            const dataset = data.props;
+            const raw = await Mongo.insertMany(Object.values(dataset))
+            console.log(`${raw.length} documents inserted with successes!`)
         } catch (err) {
             console.log(err)
         }
@@ -36,7 +38,7 @@ export class MongoProductRepositoryImplementation implements InterfaceProductRep
 
     async deleteProductByCode(code: string): Promise<void> {
         try {
-            const product = await Mongo.updateOne({ code: code }, { $set: { status: 'trash' } })
+            await Mongo.updateOne({ code: code }, { $set: { status: 'trash' } })
         } catch (err) {
             console.log(err)
         }
