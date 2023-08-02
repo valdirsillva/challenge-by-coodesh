@@ -42,7 +42,7 @@ router.get("/", async (request, response) => {
 
 })
 
-router.put('/api/add', (request, response) => {
+router.put('/api/products/add', (request, response) => {
     return createProductController.handle(request, response)
 })
 
