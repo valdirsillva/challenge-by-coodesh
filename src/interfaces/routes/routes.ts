@@ -5,6 +5,7 @@ import { createProductController } from '../../use-cases/CreateProduct';
 import { getProductByCodeController, getProductController } from '../../use-cases/GetProduct';
 import { deleteProductController } from '../../use-cases/DeleteProduct';
 import { Database } from '../../infrastructure/database/mongodb/mongoose.service';
+import { getClient } from '../elasticsearch/elasticsearch';
 
 const router = Router()
 
@@ -47,6 +48,8 @@ router.put('/api/products/add', (request, response) => {
 })
 
 router.get('/api/products', (request, response) => {
+    const client = getClient()
+
     return getProductController.handle(request, response);
 })
 

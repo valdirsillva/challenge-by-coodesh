@@ -24,7 +24,7 @@ export class MongoProductRepositoryImplementation implements InterfaceProductRep
         }
     }
 
-    async getProducts(): Promise<Product[] | []> {
+    async getProducts(): Promise<Product[] | {}> {
         try {
             const products = await Mongo.find()
             return products;
