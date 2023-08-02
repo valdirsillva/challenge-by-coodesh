@@ -7,12 +7,29 @@ export class Database {
     try {
       await mongoose.connect(process.env.DATABASE_MONGODB, {
         useNewUrlParser: true,
-        useUnifiedTopology: true,   
+        useUnifiedTopology: true,
       })
-      
-      console.log('Database connect success')
+
     } catch (err) {
       console.log('Database connection error ', err)
+    }
+  }
+
+  static getConnectionStatus() {
+    const connectionState = mongoose.connection.readyState
+    switch (connectionState) {
+      case 0:
+        return 'Desconectado';
+      case 1:
+        return 'Conectando';
+      case 2:
+        return 'Conectado';
+      case 3:
+        return 'Desconectando';
+      case 4:
+        return 'Desconectado';
+      default:
+        return 'Estado inválido';
     }
   }
 }

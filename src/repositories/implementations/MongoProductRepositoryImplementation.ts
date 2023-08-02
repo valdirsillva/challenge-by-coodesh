@@ -14,13 +14,13 @@ export class MongoProductRepositoryImplementation implements InterfaceProductRep
         }
     }
 
-    async getProductByCode(code: string): Promise<{} | null> {
+    async getProductByCode(code: string): Promise<Product | {}> {
         try {
-            const product = await Mongo.findById({ code: code })
-            return product;
+            const product = await Mongo.findOne({ code })
+            return product ?? {};
         } catch (err) {
             console.log(err)
-            return null;
+            return {}
         }
     }
 
@@ -44,7 +44,5 @@ export class MongoProductRepositoryImplementation implements InterfaceProductRep
         }
     }
 
-    async updateProducts(code: string): Promise<void> {
-
-    }
+    async updateProducts(code: string): Promise<void> { }
 }
