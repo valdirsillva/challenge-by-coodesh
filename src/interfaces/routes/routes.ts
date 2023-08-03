@@ -1,9 +1,7 @@
-import os from 'os'
-
-import { Router, response } from 'express'
+import { Router } from 'express'
 import { createProductController } from '../../use-cases/CreateProduct';
-import { getProductByCodeController, getProductController } from '../../use-cases/GetProduct';
 import { deleteProductController } from '../../use-cases/DeleteProduct';
+import { getProductByCodeController, getProductController } from '../../use-cases/GetProduct';
 import { Database } from '../../infrastructure/database/mongodb/mongoose.service';
 
 const router = Router()

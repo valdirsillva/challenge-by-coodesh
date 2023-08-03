@@ -1,26 +1,13 @@
 import { Product } from "../../application/entities/Product";
+import { getClient } from "../../interfaces/elasticsearch/elasticsearch";
 import { InterfaceProductRepository } from "../InterfaceProductRepository";
 import { Product as Mongo } from "../../infrastructure/database/mongodb/schemas/Product"
-import { getClient } from "../../interfaces/elasticsearch/elasticsearch";
 
 export class MongoProductRepositoryImplementation implements InterfaceProductRepository {
 
     async save(data: Product) {
         try {
             const dataset = data.props;
-
-            const client = getClient()
-
-            const result = await client.index({
-                index: 'meu_indice',
-                type: 'type_meu_indice',
-                body: {
-                    ...dataset
-                }
-            })
-
-            console.log(result)
-
             const raw = await Mongo.insertMany(Object.values(dataset))
             console.log(`${raw.length} documents inserted with successes!`)
         } catch (err) {
@@ -30,11 +17,30 @@ export class MongoProductRepositoryImplementation implements InterfaceProductRep
 
     async getProductByCode(code: string): Promise<Product | {}> {
         try {
-            const product = await Mongo.findOne({ code })
-            return product ?? {};
+            // const product = await Mongo.findOne({ code })
+            const { hits } = await getClient().search({
+                index: 'products',
+                body: {
+                    query: {
+                        term: {
+                            code: {
+                                value: parseInt(code)
+                            }
+                        }
+                    }
+                }
+            })
+
+            const product = hits.hits
+
+            if (product.length > 0) {
+                return product
+            } 
+            return { success: false, error: "Product not found" }
+
         } catch (err) {
-            console.log(err)
-            return {}
+            console.error(err);
+            return { success: false, error: "Product not found" }
         }
     }
 

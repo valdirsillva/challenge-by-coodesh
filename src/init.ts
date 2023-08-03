@@ -41,7 +41,7 @@ function streamData() {
             creator:pro.creator,
             created_t:pro.created_t,
             last_modified_t: parseInt(pro.last_modified_t, 10),
-            lineduct_name: pro.product_name,
+            product_name: pro.product_name,
             quantity: pro.quantity,
             brands: pro.brands,
             categories: pro.categories,
