@@ -1,7 +1,7 @@
 import { request } from '../../../testGlobal';
-import { describe, it, expect, test } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 
-describe("API Unit Tests", () => {  
+describe("API Unit Tests", () => {
   test('GET /api/data should return JSON with products', async () => {
     const response = await request.get('/api/products')
 

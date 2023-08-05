@@ -38,19 +38,19 @@ router.get("/", async (request, response) => {
     })
 })
 
-router.put('/api/products/add', (request, response) => {
+router.put('/products/add', (request, response) => {
     return createProductController.handle(request, response)
 })
 
-router.get('/api/products', (request, response) => {
+router.get('/products', (request, response) => {
     return getProductController.handle(request, response);
 })
 
-router.get('/api/products/:code', (request, response) => {
+router.get('/products/:code', (request, response) => {
     return getProductByCodeController.handle(request, response)
 })
 
-router.delete('/api/products/:code', (request, response) => {
+router.delete('/products/delete/:code', (request, response) => {
     return deleteProductController.handle(request, response)
 })
 

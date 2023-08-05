@@ -41,7 +41,7 @@ const productSchema = new mongoose.Schema({
   },
   product_name: {
     type: String,
-    required: true,
+    required: false,
     default: ''
   },
   quantity: {

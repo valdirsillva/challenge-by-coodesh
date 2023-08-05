@@ -9,5 +9,4 @@ export interface InterfaceProductRepository {
     getProductByCode(code: string): Promise<Product | {}>;
 
     deleteProductByCode(code: string): Promise<void>;
-    // updateProducts(code: string): Promise<void>
 }

@@ -6,7 +6,7 @@ const getClient = () => {
         // log: 'trace'
     })
 
-    return client
+    // return client
 }
 
 export { getClient }

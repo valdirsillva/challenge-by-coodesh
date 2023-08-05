@@ -11,14 +11,14 @@ export class CreateProductControler {
         try {
             await this.createProductUseCase.execute(data)
 
-            for await(let row of data ) {
+            for await (let row of data) {
                 getClient().index({
                     index: 'products',
                     type: 'type_products',
                     body: row
                 }, (err) => {
-                    if(err) {
-                        return response.status(400).json({ error: err })
+                    if (err) {
+                        return response.status(400).json({ error: 'There was a failure trying to index the products in elastisearch' })
                     }
                 })
             }

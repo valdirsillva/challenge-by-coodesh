@@ -1,13 +1,16 @@
-import fs from "fs";
-const zlib = require("zlib");
-const readline = require("readline");
-import { readFile, writeFile } from "fs/promises";
+import * as dotenv from 'dotenv'
+import fs from 'fs'
+import axios from "axios";
+import { readFile } from "fs/promises"
 import { FoodReadDataset } from "./interfaces/controllers/http/FoodReadDataset";
+
+dotenv.config()
 
 async function Start() {
   const response = await fetch(
     "https://challenges.coode.sh/food/data/json/index.txt"
   );
+
   const text = await response.text();
   const lines = text.split("\n");
   const lastLine = lines[lines.length - 2];
@@ -15,70 +18,62 @@ async function Start() {
   const dataset = new FoodReadDataset();
   await dataset.downloadPackageZip(lastLine!);
 
-  setTimeout(() => streamData(), 10000);
-
 }
 
-function streamData() {
-  console.log("-> data reading ...");
-  const productJSON = process.cwd().concat(`/data/product.json`);
-  const readStream = fs.createReadStream(productJSON);
+async function importData() {
+  const host = `${process.env.HOST}:${process.env.PORT}`
+  const routePath = '/api/products/add';
 
-  const rl = readline.createInterface({
-    input: readStream,
-    crlfDelay: Infinity,
-  });
+  const res = await readFile("./data/dados.json", "utf-8")
+  const data = await JSON.parse(res)
 
-  let extractedFields: any = []
+  if (data.length > 0) {
+    console.log("-> Importing product base in the database...")
+    await axios.put(`${host}${routePath}`, data)
+  }
 
-  rl.on("line", (line: any) => {
-    const parseData = JSON.parse(line);
-    const newObj = parseData.map((pro: any ) => {
-        return {
-            code: parseInt(pro.code, 10),
-            status: pro.status,
-            imported_t: pro.imported_t,
-            creator:pro.creator,
-            created_t:pro.created_t,
-            last_modified_t: parseInt(pro.last_modified_t, 10),
-            product_name: pro.product_name,
-            quantity: pro.quantity,
-            brands: pro.brands,
-            categories: pro.categories,
-            labels: pro.labels,
-            cities: pro.cities,
-            purchase_places: pro.purchase_places,
-            stores: pro.stores,
-            ingredients_text:pro.ingredients_text,
-            traces: pro.traces,
-            serving_size: pro.serving_size,
-            serving_quantity: parseFloat(pro.serving_quantity),
-            nutriscore_score: parseFloat(pro.nutriscore_score),
-            nutriscore_grade: pro.nutriscore_grade,
-            main_category: pro.main_category,
-            image_url: pro.image_url,
-        };
-    })
-    extractedFields = newObj
-  });
+  clearArchives()
+}
 
-  rl.on("close", () => {
-    try {
-      const jsonObject = extractedFields
-      const dados = process.cwd().concat(`/data/dados.json`);
+const clearArchives = () => {
+  const directoryPath = process.cwd().concat(`/data`);
 
-      fs.writeFile(dados, JSON.stringify(jsonObject), (err) => {
-        if (err) console.error("Erro ao salvar o arquivo JSON:", err);
-      });
-    } catch (error) {
-      console.error("Erro ao analisar JSON:", error);
+  fs.readdir(directoryPath, (err, files) => {
+    if (err) {
+      console.error('Error read directory:', err);
+      return;
     }
-  });
-}
 
+    // Iterar sobre a lista de arquivos e apagar um por um
+    files.forEach((file) => {
+      const filePath = `${directoryPath}/${file}`;
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error in file delete:', err);
+          return;
+        }
+        console.log(`File ${file} success delete.`);
+      });
+    });
+  });
+
+}
 
 Start();
 
+setTimeout(() => {
+
+  importData()
+    .then(() => {
+      console.log("-> data successfully imported!");
+    })
+    .catch((error) => {
+      // console.error("Error importing data:", error.message);
+    });
+
+}, 40000)
 
 
-            
+
+
