@@ -27,14 +27,15 @@ A porta e string de conexão com o MongoDB Atlas ou banco de dados local.
 - FOOD_DATA_TEXT="https://challenges.coode.sh/food/data/json/index.txt"
 
 * Instalando as dependências.
-``` npm install ```
-
-* Extrair base de dados do projeto web.
-``` npm run init ```
-**Obs:** - Para que a importação dos dados no banco seja concluída é necessário que a API esteja rodando.
+1. ``` npm install ```
 
 * Executar projeto
-```npm run dev ``` 
+2. ```npm run dev```
+
+* Extrair base de dados do projeto web.
+3. ``` npm run init ```
+- **Obs:** - Para que a importação dos dados no banco seja concluída é necessário que a API esteja rodando.
+
 
 >  This is a challenge by [Coodesh](https://coodesh.com/)
 
