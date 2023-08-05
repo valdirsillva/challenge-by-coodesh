@@ -21,29 +21,27 @@ export class MongoProductRepositoryImplementation implements InterfaceProductRep
 
     async getProductByCode(code: string): Promise<Product | {}> {
         try {
-            const product = await Mongo.findOne({ code })
+            // const product = await Mongo.findOne({ code })
 
-            return product ?? {};
+            const { hits } = await getClient().search({
+                index: 'products',
+                body: {
+                    query: {
+                        term: {
+                            code: {
+                                value: parseInt(code)
+                            }
+                        }
+                    }
+                }
+            })
 
-            // const { hits } = await getClient().search({
-            //     index: 'products',
-            //     body: {
-            //         query: {
-            //             term: {
-            //                 code: {
-            //                     value: parseInt(code)
-            //                 }
-            //             }
-            //         }
-            //     }
-            // })
+            const product = hits.hits
 
-            // const product = hits.hits
-
-            // if (product.length > 0) {
-            //     return product
-            // }
-            // return { success: false, error: "Product not found" }
+            if (product.length > 0) {
+                return product
+            }
+            return { success: false, error: "Product not found" }
 
         } catch (err) {
             console.error(err);
