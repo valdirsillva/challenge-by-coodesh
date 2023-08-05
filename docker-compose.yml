@@ -41,6 +41,12 @@ services:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     networks:
       - elastic
-networks:
-  elastic:
-    driver: bridge
+  cron:
+    build: cron
+    container_name: cronjobs
+    volumnes:
+      - /var/log/cronjobs:/var/log/cronjobs
+      - ./cron/cronjobs01:/etc/crontabs/root
+      - ./sripts:/home/challenge_by_coodesh/src/
+    networks:
+      - app-network
