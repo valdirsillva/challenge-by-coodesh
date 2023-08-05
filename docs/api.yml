@@ -1,6 +1,296 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: DotNet Challenge 20200902
-  description: CRUD Products
-  version: '0.1'
+  title: API Open Food Facts
+  description: REST API para importar dados da Base de Dados do projeto web Open Food Facts, pegando a versão mais recente. A importação da base de dados será executada via CRON diariamente ás 06h00 da manhã.
+  version: 1.0.0
+  contact:
+    name: Equipe de Desenvolvimento
+    email: equipe@example.com
+  license:
+    name: Licença MIT
+    url: https://opensource.org/licenses/MIT
 
+servers:
+  - url: http://api.example.com/v1
+
+paths:
+  /products:
+    get:
+      summary: Lista todos os produtos
+      responses:
+        '200':
+          description: Sucesso. Retorna uma lista de produtos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Erro interno do servidor.
+
+  /products/{code}:
+    get:
+      summary: Obter um produto
+      operationId: getProductByCode
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Codigo do produto a ser obtido.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso. Retorna os detalhes do produto.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Produto não encontrado.
+        '500':
+          description: Erro interno do servidor.
+  
+  /products/delete/{code}:
+    delete:
+      summary: Muda status do produto para trash
+      operationId: deleteProductByCode
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Codigo do produto a ser obtido.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso. Retorna os detalhes do produto.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDeleted'
+        '404':
+          description: Produto não encontrado.
+        '500':
+          description: Erro interno do servidor.   
+  /products/add/:
+    put:
+      summary: Adicionar atualizações de produtos
+      operationId: addProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductSave'
+      responses:
+        '201':
+          description: Produto criado com sucesso.
+        '400':
+          description: Requisição inválida.
+        '500':
+          description: Erro interno do servidor.        
+        
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '64ce599e178260be747f8178'
+        code:
+          type: number
+          example: '20760955'
+        status:
+          type: string
+          example: 'published'
+        imported_t:
+          type: string
+          example: ''
+        creator:
+          type: string
+          example: 'halal-app-chakib'
+        created_t:
+          type: number
+          example: '1970-01-19T14:19:03.368Z'
+        last_modified_t:
+          type: number
+          example: 1606743401
+        product_name:
+          type: string
+          example: 'Madalenas quadradas 123'
+        quantity:
+          type: string
+          example: '380 g (6 x 2 u.)'
+        brands:
+          type: string
+          example: 'La Cestera'
+        categories:
+          type: string
+          example: 'Lanches comida, Lanches doces, Biscoitos e Bolos, Bolos, Madalenas'
+        labels:
+          type: string
+          example: 'Contem gluten, Contém derivados de ovos, Contém ovos'
+        cities:
+          type: string
+          example: 'Braga'
+        purchase_places:
+          type: string
+          example: 'Braga,Portugal'
+        stores:
+          type: string
+          example: 'Lidl'
+        ingredients_text:
+          type: string
+          example: 'farinha de trigo, açúcar, óleo vegetal de girassol, clara de ovo, ovo, humidificante (sorbitol), levedantes químicos (difosfato dissódico, hidrogenocarbonato de sódio), xarope de glucose-frutose, sal, aroma'
+        traces:
+          type: string
+          example: 'Frutos de casca rija,Leite,Soja,Sementes de sésamo,Produtos à base de sementes de sésamo'
+        serving_size:
+          type: string
+          example: 'madalena 31.7 g'
+        serving_quantity:
+          type: number
+          example: '31.7'
+        nutriscore_score:
+          type: number
+          example: '17'
+        nutriscore_grade:
+          type: string
+          example: 'd'
+        main_category:
+          type: string
+          example: 'en:madeleines'
+        image_url:
+          type: string
+          example: 'https://static.openfoodfacts.org/images/products/20221126/front_pt.5.400.jpg'
+    ProductDeleted:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '64ce599e178260be747f8178'
+        code:
+          type: number
+          example: '20760955'
+        status:
+          type: string
+          example: 'trash'
+        imported_t:
+          type: string
+          example: ''
+        creator:
+          type: string
+          example: 'halal-app-chakib'
+        created_t:
+          type: number
+          example: '1970-01-19T14:19:03.368Z'
+        last_modified_t:
+          type: number
+          example: 1606743401
+        product_name:
+          type: string
+          example: 'Madalenas quadradas 123'
+        quantity:
+          type: string
+          example: '380 g (6 x 2 u.)'
+        brands:
+          type: string
+          example: 'La Cestera'
+        categories:
+          type: string
+          example: 'Lanches comida, Lanches doces, Biscoitos e Bolos, Bolos, Madalenas'
+        labels:
+          type: string
+          example: 'Contem gluten, Contém derivados de ovos, Contém ovos'
+        cities:
+          type: string
+          example: 'Braga'
+        purchase_places:
+          type: string
+          example: 'Braga,Portugal'
+        stores:
+          type: string
+          example: 'Lidl'
+        ingredients_text:
+          type: string
+          example: 'farinha de trigo, açúcar, óleo vegetal de girassol, clara de ovo, ovo, humidificante (sorbitol), levedantes químicos (difosfato dissódico, hidrogenocarbonato de sódio), xarope de glucose-frutose, sal, aroma'
+        traces:
+          type: string
+          example: 'Frutos de casca rija,Leite,Soja,Sementes de sésamo,Produtos à base de sementes de sésamo'
+        serving_size:
+          type: string
+          example: 'madalena 31.7 g'
+        serving_quantity:
+          type: number
+          example: '31.7'
+        nutriscore_score:
+          type: number
+          example: '17'
+        nutriscore_grade:
+          type: string
+          example: 'd'
+        main_category:
+          type: string
+          example: 'en:madeleines'
+        image_url:
+          type: string
+          example: 'https://static.openfoodfacts.org/images/products/20221126/front_pt.5.400.jpg'
+    ProductSave:
+      type: object
+      properties:
+        code:
+          type: integer
+        status:
+          type: string
+          enum: ["published", "unpublished"]
+        imported_t:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+        creator:
+          type: string
+        created_t:
+          type: integer
+        last_modified_t:
+          type: integer
+        product_name:
+          type: string
+        quantity:
+          type: string
+        brands:
+          type: string
+        categories:
+          type: string
+        labels:
+          type: string
+        cities:
+          type: string
+        purchase_places:
+          type: string
+        stores:
+          type: string
+        ingredients_text:
+          type: string
+        traces:
+          type: string
+        serving_size:
+          type: string
+        serving_quantity:
+          type: number
+        nutriscore_score:
+          type: integer
+        nutriscore_grade:
+          type: string
+        main_category:
+          type: string
+        image_url:
+          type: string
+          format: uri'      
