@@ -5,12 +5,16 @@ Aplicação construída para dar suporte a equipes de nutricionistas por meio de
 
 ## Tecnologias utilizadas
 
-. NodeJS
-. Typescript
-. Express
-. MongoDB
-. Mongoose
-. ElasticSearch
+- NodeJS
+- Typescript
+- Axios
+- Jest
+- Express
+- MongoDB
+- Mongoose
+- ElasticSearch
+- Swagger UI
+- Swagger UI Express
 
 ## Como rodar projeto
 * Preencher as variáveis de ambiente:
@@ -23,15 +27,16 @@ A porta e string de conexão com o MongoDB Atlas ou banco de dados local.
 - FOOD_DATA_TEXT="https://challenges.coode.sh/food/data/json/index.txt"
 
 * Instalando as dependências.
-- npm install
+``` npm install ```
 
 * Extrair base de dados do projeto web.
-- npm run init
-
+``` npm run init ```
 **Obs:** - Para que a importação dos dados no banco seja concluída é necessário que a API esteja rodando.
 
 * Executar projeto
-- npm run dev 
+```npm run dev ``` 
+
+>  This is a challenge by [Coodesh](https://coodesh.com/)
 
 ### REST API
 
